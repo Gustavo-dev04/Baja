@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from PIL import UnidentifiedImageError
 
 from .config import ALLOWED_ORIGINS, MODEL_WEIGHTS
 from .inference import get_detector
@@ -55,4 +56,10 @@ async def inspect(file: UploadFile = File(...)) -> InspectionResult:
         raise HTTPException(status_code=400, detail="Empty file upload.")
 
     detector = get_detector()
-    return detector.detect(data)
+    try:
+        return detector.detect(data)
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid or unsupported image file.",
+        ) from exc

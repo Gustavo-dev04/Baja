@@ -14,39 +14,56 @@ export function CameraFeed({ onCapture, disabled }: Props) {
 
   useEffect(() => {
     let stream: MediaStream | null = null;
+    let cancelled = false;
 
     async function start() {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 640, height: 480 },
+          video: {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            facingMode: { ideal: "environment" },
+          },
           audio: false,
         });
+
+        if (cancelled) {
+          stream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           await videoRef.current.play();
           setReady(true);
         }
       } catch (e) {
-        setError(
-          e instanceof Error ? e.message : "Falha ao acessar a câmera.",
-        );
+        if (!cancelled) {
+          setError(
+            e instanceof Error ? e.message : "Falha ao acessar a câmera.",
+          );
+        }
       }
     }
+
     start();
 
     return () => {
-      stream?.getTracks().forEach((t) => t.stop());
+      cancelled = true;
+      stream?.getTracks().forEach((track) => track.stop());
     };
   }, []);
 
   function capture() {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !video.videoWidth || !video.videoHeight) return;
+
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
     ctx.drawImage(video, 0, 0);
     canvas.toBlob(
       (blob) => {
@@ -65,6 +82,7 @@ export function CameraFeed({ onCapture, disabled }: Props) {
           className="w-full"
           playsInline
           muted
+          autoPlay
         />
         {error && (
           <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-sm text-red-400">
@@ -77,8 +95,11 @@ export function CameraFeed({ onCapture, disabled }: Props) {
         disabled={!ready || disabled}
         className="w-full rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Capturar e Inspecionar
+        Capturar e inspecionar
       </button>
+      <p className="text-xs text-slate-500">
+        Em celular, o navegador costuma pedir HTTPS para liberar a câmera.
+      </p>
     </div>
   );
 }
