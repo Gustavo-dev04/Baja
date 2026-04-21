@@ -40,11 +40,12 @@ export function DetectionOverlay({
     if (!canvas || !img || !imageSize) return;
 
     const [w, h] = imageSize;
+    const safeCanvas = canvas;
 
     function draw() {
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext("2d");
+      safeCanvas.width = w;
+      safeCanvas.height = h;
+      const ctx = safeCanvas.getContext("2d");
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
 
