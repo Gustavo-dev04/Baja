@@ -36,6 +36,7 @@ export function CameraFeed({ onCapture, disabled }: Props) {
           videoRef.current.srcObject = stream;
           await videoRef.current.play();
           setReady(true);
+          setError(null);
         }
       } catch (e) {
         if (!cancelled) {
@@ -75,31 +76,60 @@ export function CameraFeed({ onCapture, disabled }: Props) {
   }
 
   return (
-    <div className="space-y-3">
-      <div className="relative overflow-hidden rounded-lg border border-slate-800 bg-black">
-        <video
-          ref={videoRef}
-          className="w-full"
-          playsInline
-          muted
-          autoPlay
-        />
-        {error && (
-          <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-sm text-red-400">
-            {error}
-          </div>
-        )}
+    <section className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/70 shadow-xl shadow-slate-950/30 backdrop-blur">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div>
+          <h2 className="text-base font-semibold text-white">
+            Captura por câmera
+          </h2>
+          <p className="text-sm text-slate-400">
+            Use a webcam para capturar um frame e enviar para inspeção.
+          </p>
+        </div>
+
+        <div
+          className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ${
+            error
+              ? "bg-red-950/60 text-red-300 ring-red-800"
+              : ready
+                ? "bg-emerald-950/60 text-emerald-300 ring-emerald-800"
+                : "bg-slate-950/70 text-slate-300 ring-slate-700"
+          }`}
+        >
+          {error ? "Câmera indisponível" : ready ? "Câmera pronta" : "Solicitando acesso"}
+        </div>
       </div>
-      <button
-        onClick={capture}
-        disabled={!ready || disabled}
-        className="w-full rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Capturar e inspecionar
-      </button>
-      <p className="text-xs text-slate-500">
-        Em celular, o navegador costuma pedir HTTPS para liberar a câmera.
-      </p>
-    </div>
+
+      <div className="space-y-4 p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/80 shadow-inner">
+          <video
+            ref={videoRef}
+            className="aspect-video w-full object-cover"
+            playsInline
+            muted
+            autoPlay
+          />
+          {error && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-950/70 p-6 text-center text-sm text-red-300">
+              {error}
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <button
+            onClick={capture}
+            disabled={!ready || disabled}
+            className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/30 disabled:text-slate-400"
+          >
+            Capturar e inspecionar
+          </button>
+          <p className="text-xs leading-5 text-slate-500 sm:max-w-xs sm:text-right">
+            Em celular, o navegador normalmente exige HTTPS e permissão de
+            câmera para liberar a captura.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
