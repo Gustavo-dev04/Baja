@@ -22,7 +22,11 @@ export function CameraFeed({ onCapture, disabled }: Props) {
     async function start() {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 640, height: 480 },
+          video: {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            facingMode: { ideal: "environment" },
+          },
           audio: false,
         });
         if (videoRef.current) {
