@@ -8,11 +8,11 @@ casca de laranja, falhas de cobertura, bolhas) e desgaste (riscos, oxidação).
 
 ## Arquitetura
 
-```
- Câmeras → Frontend (Next.js) → API FastAPI → Modelo YOLO (nuvem) → JSON
-                                                                        │
-                                                                        ▼
-                                                            Overlay + relatório
+```text
+Câmeras -> Frontend (Next.js) -> API FastAPI -> Modelo YOLO (nuvem) -> JSON
+                                                                      |
+                                                                      v
+                                                          Overlay + relatório
 ```
 
 - **Backend** (`backend/`): FastAPI + Ultralytics YOLO servindo um endpoint
@@ -21,6 +21,17 @@ casca de laranja, falhas de cobertura, bolhas) e desgaste (riscos, oxidação).
   de imagens e visualização das detecções sobre a imagem.
 - **Documentação** (`docs/`): arquitetura, hardware da câmara, escolha do
   modelo, deploy em nuvem, roadmap e referências.
+
+## Modo recomendado para o protótipo
+
+Para facilitar a demonstração por **URL pública**:
+
+- publique o **backend** em um provedor simples para Docker, como
+  **Hugging Face Spaces**;
+- publique o **frontend** na **Vercel**;
+- configure `NEXT_PUBLIC_API_URL` com a URL pública do backend.
+
+Guia rápido: veja [`DEPLOY.md`](./DEPLOY.md).
 
 ## Como rodar localmente
 
@@ -48,6 +59,13 @@ npm run dev
 ```
 
 Abra `http://localhost:3000`.
+
+## Variáveis de ambiente
+
+Exemplos prontos:
+
+- `backend/.env.example`
+- `frontend/.env.example`
 
 ## Status
 
