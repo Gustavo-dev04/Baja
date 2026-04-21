@@ -40,15 +40,16 @@ export function DetectionOverlay({
     if (!canvas || !img || !imageSize) return;
 
     function draw() {
-      const [w, h] = imageSize!;
-      canvas!.width = w;
-      canvas!.height = h;
-      const ctx = canvas!.getContext("2d");
+      const [w, h] = imageSize;
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
 
       ctx.lineWidth = Math.max(2, Math.round(w / 320));
-      ctx.font = `${Math.max(12, Math.round(w / 48))}px system-ui, sans-serif`;
+      const fontSize = Math.max(12, Math.round(w / 48));
+      ctx.font = `${fontSize}px system-ui, sans-serif`;
       ctx.textBaseline = "top";
 
       for (const det of detections) {
@@ -61,12 +62,16 @@ export function DetectionOverlay({
         const metrics = ctx.measureText(text);
         const pad = 4;
         const textH =
-          (metrics.actualBoundingBoxAscent || 12) +
+          (metrics.actualBoundingBoxAscent || fontSize) +
           (metrics.actualBoundingBoxDescent || 4);
+        const labelH = textH + pad * 2;
+        const labelW = metrics.width + pad * 2;
+        const labelY = y1 - labelH < 0 ? y1 + 2 : y1 - labelH;
+
         ctx.fillStyle = color;
-        ctx.fillRect(x1, y1 - textH - pad * 2, metrics.width + pad * 2, textH + pad * 2);
+        ctx.fillRect(x1, labelY, labelW, labelH);
         ctx.fillStyle = "white";
-        ctx.fillText(text, x1 + pad, y1 - textH - pad);
+        ctx.fillText(text, x1 + pad, labelY + pad);
       }
     }
 
@@ -95,6 +100,11 @@ export function DetectionOverlay({
         className="absolute inset-0 h-full w-full"
         style={{ pointerEvents: "none" }}
       />
+      {detections.length > 0 && (
+        <div className="absolute right-3 top-3 rounded-full bg-slate-900/90 px-3 py-1 text-xs font-semibold text-white shadow-lg ring-1 ring-white/10">
+          {detections.length} {detections.length === 1 ? "detecção" : "detecções"}
+        </div>
+      )}
     </div>
   );
 }
