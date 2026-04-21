@@ -15,11 +15,21 @@ MODEL_WEIGHTS = os.getenv("BAJA_MODEL_WEIGHTS", "yolov8n.pt")
 # Confidence threshold for detections returned to the client.
 CONF_THRESHOLD = float(os.getenv("BAJA_CONF_THRESHOLD", "0.25"))
 
+
+def _parse_allowed_origins(value: str) -> list[str]:
+    origins = [origin.strip() for origin in value.split(",") if origin.strip()]
+    if origins:
+        return origins
+    return ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+
 # CORS origins allowed to call the API.
-ALLOWED_ORIGINS = os.getenv(
-    "BAJA_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000",
-).split(",")
+ALLOWED_ORIGINS = _parse_allowed_origins(
+    os.getenv(
+        "BAJA_ALLOWED_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000",
+    )
+)
 
 # Demo mapping: until a fine-tuned model exists, map generic COCO classes
 # to paint-defect labels so the UI demonstrates the intended output.
