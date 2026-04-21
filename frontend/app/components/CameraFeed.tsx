@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   onCapture: (blob: Blob) => void;
   disabled?: boolean;
 };
 
+const LIVE_INTERVAL_MS = 1500;
+
 export function CameraFeed({ onCapture, disabled }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [live, setLive] = useState(false);
+  const [liveCount, setLiveCount] = useState(0);
 
   useEffect(() => {
     let stream: MediaStream | null = null;
@@ -39,9 +43,9 @@ export function CameraFeed({ onCapture, disabled }: Props) {
     };
   }, []);
 
-  function capture() {
+  const captureOnce = useCallback(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !video.videoWidth) return;
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -53,9 +57,20 @@ export function CameraFeed({ onCapture, disabled }: Props) {
         if (blob) onCapture(blob);
       },
       "image/jpeg",
-      0.9,
+      0.85,
     );
-  }
+  }, [onCapture]);
+
+  useEffect(() => {
+    if (!live || !ready) return;
+    setLiveCount(0);
+    const id = window.setInterval(() => {
+      captureOnce();
+      setLiveCount((c) => c + 1);
+    }, LIVE_INTERVAL_MS);
+    captureOnce();
+    return () => window.clearInterval(id);
+  }, [live, ready, captureOnce]);
 
   return (
     <div className="space-y-3">
@@ -66,19 +81,41 @@ export function CameraFeed({ onCapture, disabled }: Props) {
           playsInline
           muted
         />
+        {live && (
+          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-red-600/90 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+            </span>
+            AO VIVO · {liveCount} frames
+          </div>
+        )}
         {error && (
           <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-sm text-red-400">
             {error}
           </div>
         )}
       </div>
-      <button
-        onClick={capture}
-        disabled={!ready || disabled}
-        className="w-full rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Capturar e Inspecionar
-      </button>
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={captureOnce}
+          disabled={!ready || disabled || live}
+          className="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Capturar frame
+        </button>
+        <button
+          onClick={() => setLive((v) => !v)}
+          disabled={!ready}
+          className={`rounded-md px-4 py-2 font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-50 ${
+            live
+              ? "bg-red-600 hover:bg-red-500"
+              : "bg-blue-600 hover:bg-blue-500"
+          }`}
+        >
+          {live ? "Parar modo ao vivo" : "Iniciar modo ao vivo"}
+        </button>
+      </div>
     </div>
   );
 }
