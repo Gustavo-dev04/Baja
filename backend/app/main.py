@@ -1,13 +1,13 @@
-"""FastAPI application exposing the paint-inspection endpoint."""
+"""FastAPI application — mounts public + admin routers."""
 
 from __future__ import annotations
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import ALLOWED_ORIGINS, MODEL_WEIGHTS
+from .core.config import ALLOWED_ORIGINS
 from .inference import get_detector
-from .schemas import HealthResponse, InspectionResult
+from .routers import annotations, auth, datasets, images, inspect
 
 app = FastAPI(
     title="Baja Paint Inspection API",
@@ -15,7 +15,7 @@ app = FastAPI(
         "Serves YOLO inference for paint-defect detection on BAJA-style "
         "chassis photographed inside the inspection chamber."
     ),
-    version="0.1.0",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -26,33 +26,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Public — unchanged contracts.
+app.include_router(inspect.router)
+
+# Admin / data plane.
+app.include_router(auth.router)
+app.include_router(datasets.router)
+app.include_router(images.router)
+app.include_router(annotations.router)
+
 
 @app.on_event("startup")
 def _warmup() -> None:
-    # Load weights eagerly so the first request is fast.
+    # Load weights eagerly so the first /inspect request is fast.
     get_detector()
-
-
-@app.get("/health", response_model=HealthResponse)
-def health() -> HealthResponse:
-    detector = get_detector()
-    return HealthResponse(
-        status="ok",
-        model=MODEL_WEIGHTS,
-        demo_mode=detector.demo_mode,
-    )
-
-
-@app.post("/inspect", response_model=InspectionResult)
-async def inspect(file: UploadFile = File(...)) -> InspectionResult:
-    if file.content_type is None or not file.content_type.startswith("image/"):
-        raise HTTPException(
-            status_code=400,
-            detail=f"Unsupported content type: {file.content_type!r}",
-        )
-    data = await file.read()
-    if not data:
-        raise HTTPException(status_code=400, detail="Empty file upload.")
-
-    detector = get_detector()
-    return detector.detect(data)

@@ -114,8 +114,7 @@ tipo `baja-xxxxxxxx.vercel.app`.
 A Vercel gerou uma URL tipo `baja-xyz.vercel.app`. O backend precisa
 aceitar requisições dessa origem.
 
-No Space do HF, abra o arquivo onde configura variáveis (em
-**Settings → Variables and secrets** do Space). Adicione:
+No Space do HF, abra **Settings → Variables and secrets**. Adicione:
 
 | Nome | Valor |
 |---|---|
@@ -126,6 +125,59 @@ No Space do HF, abra o arquivo onde configura variáveis (em
 O Space vai reiniciar automaticamente (~30 s). Depois disso,
 abra a URL da Vercel no celular ou notebook — tudo funciona via
 HTTPS, inclusive webcam.
+
+---
+
+## Parte 3b — Habilitar o data plane (Supabase)
+
+Necessário a partir da Semana 1 da expansão (datasets, imagens,
+anotações, treino, modelos). Sem isso, `/inspect` e `/health` continuam
+funcionando, mas os endpoints `/api/v1/*` retornam 503.
+
+### 3b.1. Criar projeto Supabase
+1. https://supabase.com/dashboard/new/project (free tier).
+2. Anote `Project URL` e as duas keys (`anon`, `service_role`).
+3. Em **SQL Editor**, cole e execute o conteúdo de
+   `supabase/migrations/0001_init.sql`.
+4. Em **Storage**, crie dois buckets **privados**: `baja-images` e
+   `baja-models`.
+
+Detalhes em [`supabase/README.md`](./supabase/README.md).
+
+### 3b.2. Variáveis no Space (HF)
+Em **Settings → Variables and secrets**, adicionar:
+
+| Nome | Tipo | Valor |
+|---|---|---|
+| `SUPABASE_URL` | variable | URL do projeto |
+| `SUPABASE_SERVICE_ROLE_KEY` | secret | service_role key |
+| `BAJA_ADMIN_PASSWORD` | secret | senha forte da sua escolha |
+| `BAJA_JWT_SECRET` | secret | string aleatória 64+ chars |
+
+Opcional: `HF_TOKEN`, `BAJA_HF_MODEL_REPO` (semanas 3+).
+
+### 3b.3. Variáveis na Vercel
+Em **Project Settings → Environment Variables**:
+
+| Nome | Valor |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key |
+
+### 3b.4. Validar
+```bash
+# Login admin
+curl -X POST https://<api>.hf.space/api/v1/auth/admin-token \
+  -H 'Content-Type: application/json' \
+  -d '{"password":"<senha>"}'
+# { "token": "eyJ..." }
+
+# Criar dataset
+curl -X POST https://<api>.hf.space/api/v1/datasets \
+  -H "Authorization: Bearer eyJ..." \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"default","description":"primeiro dataset"}'
+```
 
 ---
 

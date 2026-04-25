@@ -1,4 +1,4 @@
-"""Pydantic schemas for API requests and responses."""
+"""Schemas for the public inspection endpoint (unchanged contract)."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 class Detection(BaseModel):
     label: str = Field(..., description="Defect class label.")
     raw_label: str = Field(
-        ..., description="Original model class name before demo remap."
+        ..., description="Original model class name before demo remap.",
     )
     confidence: float = Field(..., ge=0.0, le=1.0)
     bbox: list[float] = Field(

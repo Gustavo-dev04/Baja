@@ -15,10 +15,12 @@ casca de laranja, falhas de cobertura, bolhas) e desgaste (riscos, oxidação).
                                                             Overlay + relatório
 ```
 
-- **Backend** (`backend/`): FastAPI + Ultralytics YOLO servindo um endpoint
-  REST `/inspect`.
+- **Backend** (`backend/`): FastAPI + Ultralytics YOLO servindo `/inspect`
+  e `/api/v1/*` (datasets, imagens, anotações, modelos).
 - **Frontend** (`frontend/`): Next.js + React com captura de webcam, upload
   de imagens e visualização das detecções sobre a imagem.
+- **Supabase** (`supabase/`): migrations e setup do banco + storage para
+  o pipeline de fine-tuning.
 - **Documentação** (`docs/`): arquitetura, hardware da câmara, escolha do
   modelo, deploy em nuvem, roadmap e referências.
 
