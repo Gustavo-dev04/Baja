@@ -10,6 +10,7 @@ from .core.config import (  # noqa: F401
     BASE_DIR,
     CONF_THRESHOLD,
     DEMO_CLASS_MAP,
+    MODEL_CACHE_DIR,
     MODELS_DIR,
     MODEL_WEIGHTS,
     PAINT_DEFECT_CLASSES,
