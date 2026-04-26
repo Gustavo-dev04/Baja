@@ -63,8 +63,8 @@ def run_training(
         exist_ok=True,
     )
 
-    best = Path(project) / run_name / "weights" / "best.pt"
-    print(f"\n✅ best.pt salvo em: {best.absolute()}")
+    best = (Path(project) / run_name / "weights" / "best.pt").resolve()
+    print(f"\n✅ best.pt salvo em: {best}")
 
     if push_to_hub:
         if not hf_repo:
@@ -75,12 +75,11 @@ def run_training(
 
 
 def _push_to_hf(weights: Path, repo_id: str) -> None:
-    from huggingface_hub import HfApi, login
+    from huggingface_hub import HfApi
 
-    token = os.environ.get("HF_TOKEN")
-    if not token:
-        raise RuntimeError("HF_TOKEN não definido.")
-    login(token=token)
+    weights = Path(weights).resolve()
+    if not weights.is_file():
+        raise FileNotFoundError(f"best.pt não encontrado em {weights}")
     api = HfApi()
     api.create_repo(repo_id=repo_id, exist_ok=True, repo_type="model")
     api.upload_file(
