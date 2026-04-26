@@ -53,7 +53,7 @@ def run_training(
     print(f"\n=== Treinando ({model}, {epochs} epochs) ===")
     yolo = YOLO(model)
     run_name = name or f"{dataset_name}-ft"
-    yolo.train(
+    train_results = yolo.train(
         data=str(yaml_path),
         epochs=epochs,
         imgsz=img_size,
@@ -63,7 +63,22 @@ def run_training(
         exist_ok=True,
     )
 
-    best = (Path(project) / run_name / "weights" / "best.pt").resolve()
+    # Ultralytics resolves project paths relative to its own runs dir.
+    # Trust the trainer's reported save_dir instead of guessing.
+    save_dir = Path(getattr(train_results, "save_dir", "")) if train_results else None
+    if save_dir and (save_dir / "weights" / "best.pt").exists():
+        best = (save_dir / "weights" / "best.pt").resolve()
+    else:
+        best = (Path(project) / run_name / "weights" / "best.pt").resolve()
+        if not best.is_file():
+            # Fallback: search the most recent best.pt under the project dir.
+            candidates = sorted(
+                Path(".").rglob("weights/best.pt"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True,
+            )
+            if candidates:
+                best = candidates[0].resolve()
     print(f"\n✅ best.pt salvo em: {best}")
 
     if push_to_hub:
