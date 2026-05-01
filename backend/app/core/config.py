@@ -30,6 +30,8 @@ ALLOWED_ORIGINS = os.getenv(
     "http://localhost:3000,http://127.0.0.1:3000",
 ).split(",")
 
+ALLOWED_ORIGIN_REGEX = os.getenv("BAJA_ALLOWED_ORIGIN_REGEX", "") or None
+
 # =========================================================
 # Supabase
 # =========================================================

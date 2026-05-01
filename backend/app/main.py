@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .core.config import ALLOWED_ORIGINS
+from .core.config import ALLOWED_ORIGIN_REGEX, ALLOWED_ORIGINS
 from .inference import get_detector
 from .routers import annotations, auth, datasets, images, inspect
 
@@ -21,6 +21,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
