@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Baja — Inspeção de Pintura",
+  title: "Magnus — Inspeção de pintura por IA",
   description:
-    "Detecção automática de defeitos de pintura em chassis BAJA via IA.",
+    "Magnus é o sistema de IA que inspeciona a pintura de chassis BAJA em tempo real, identificando escorrimentos, casca de laranja, bolhas e mais.",
 };
 
 export default function RootLayout({
@@ -13,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

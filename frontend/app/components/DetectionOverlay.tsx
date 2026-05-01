@@ -17,14 +17,15 @@ const SEVERITY_BY_LABEL: Record<string, Severity> = {
   oxidacao: "alto",
   bolha: "medio",
   casca_de_laranja: "medio",
+  water_spotting: "medio",
   risco: "baixo",
   desgaste_generico: "baixo",
 };
 
 const SEVERITY_COLOR: Record<Severity, string> = {
-  alto: "#ef4444",
-  medio: "#f59e0b",
-  baixo: "#38bdf8",
+  alto: "#b1352b",
+  medio: "#b07515",
+  baixo: "#3d6347",
 };
 
 function colorFor(label: string): string {
@@ -53,23 +54,20 @@ export function DetectionOverlay({
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
 
-      const stroke = Math.max(3, Math.round(w / 200));
+      const stroke = Math.max(3, Math.round(w / 220));
       ctx.lineWidth = stroke;
-      const fontSize = Math.max(14, Math.round(w / 40));
-      ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
+      const fontSize = Math.max(13, Math.round(w / 44));
+      ctx.font = `600 ${fontSize}px ui-sans-serif, system-ui, sans-serif`;
       ctx.textBaseline = "top";
 
       for (const det of detections) {
         const [x1, y1, x2, y2] = det.bbox;
         const color = colorFor(det.label);
 
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 12;
         ctx.strokeStyle = color;
         ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-        ctx.shadowBlur = 0;
 
-        const text = `${det.label} ${(det.confidence * 100).toFixed(0)}%`;
+        const text = `${det.label} · ${(det.confidence * 100).toFixed(0)}%`;
         const metrics = ctx.measureText(text);
         const pad = 6;
         const textH =
@@ -93,20 +91,32 @@ export function DetectionOverlay({
 
   if (!imageUrl) {
     return (
-      <div className="flex h-80 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-slate-800 text-slate-500">
-        <div className="text-4xl opacity-30">📷</div>
-        <div className="text-sm">Aguardando captura ou upload</div>
+      <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-line bg-stone-50 text-ink-subtle">
+        <svg viewBox="0 0 24 24" fill="none" className="h-8 w-8" aria-hidden>
+          <path
+            d="M3 8.4c0-.8.7-1.4 1.4-1.4h1.7c.5 0 .9-.2 1.2-.6L9 4.6c.3-.4.7-.6 1.2-.6h3.6c.5 0 .9.2 1.2.6L16.7 6.4c.3.4.7.6 1.2.6h1.7c.7 0 1.4.6 1.4 1.4V18c0 .8-.7 1.4-1.4 1.4H4.4C3.7 19.4 3 18.8 3 18V8.4Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <circle cx="12" cy="13" r="3.4" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
+        <p className="text-sm">Aguardando imagem</p>
+        <p className="-mt-2 max-w-xs text-center text-xs text-ink-subtle">
+          Capture com a câmera ou faça o upload de uma foto para iniciar a
+          análise.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden rounded-xl border border-line bg-stone-900">
       <img
         ref={imgRef}
         src={imageUrl}
         alt="Imagem inspecionada"
-        className="w-full rounded-lg border border-slate-800"
+        className="block w-full"
       />
       <canvas
         ref={canvasRef}
@@ -114,7 +124,7 @@ export function DetectionOverlay({
         style={{ pointerEvents: "none" }}
       />
       {detections.length > 0 && (
-        <div className="absolute right-3 top-3 rounded-full bg-slate-900/90 px-3 py-1 text-xs font-semibold text-white shadow-lg ring-1 ring-white/10">
+        <div className="absolute right-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-ink shadow-card">
           {detections.length}{" "}
           {detections.length === 1 ? "defeito" : "defeitos"}
         </div>

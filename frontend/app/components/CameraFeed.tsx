@@ -78,25 +78,30 @@ export function CameraFeed({ onCapture, disabled }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="relative overflow-hidden rounded-lg border border-slate-800 bg-black">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-stone-900">
         <video
           ref={videoRef}
-          className="w-full"
+          className="h-full w-full object-cover"
           playsInline
           muted
         />
         {live && (
-          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-red-600/90 px-3 py-1 text-xs font-semibold text-white shadow-lg">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-magnus-700/95 px-2.5 py-1 text-xs font-medium text-white shadow-card">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
             </span>
-            AO VIVO · {liveCount} frames
+            Ao vivo · {liveCount}
           </div>
         )}
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-sm text-red-400">
+          <div className="absolute inset-0 flex items-center justify-center bg-stone-900/95 p-6 text-center text-sm text-stone-300">
             {error}
+          </div>
+        )}
+        {!ready && !error && (
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-stone-400">
+            Iniciando câmera…
           </div>
         )}
       </div>
@@ -104,20 +109,16 @@ export function CameraFeed({ onCapture, disabled }: Props) {
         <button
           onClick={captureOnce}
           disabled={!ready || disabled || live}
-          className="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-primary"
         >
           Capturar frame
         </button>
         <button
           onClick={() => setLive((v) => !v)}
           disabled={!ready}
-          className={`rounded-md px-4 py-2 font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-50 ${
-            live
-              ? "bg-red-600 hover:bg-red-500"
-              : "bg-blue-600 hover:bg-blue-500"
-          }`}
+          className={live ? "btn-primary !bg-rose-600 hover:!bg-rose-500" : "btn-secondary"}
         >
-          {live ? "Parar modo ao vivo" : "Iniciar modo ao vivo"}
+          {live ? "Parar ao vivo" : "Iniciar ao vivo"}
         </button>
       </div>
     </div>
