@@ -109,7 +109,15 @@ class Source:
 SOURCES: list[Source] = [
     Source(
         "baopersonal", "paint-defect-combine-3",
-        "base — 8 classes nomeadas, ~2.8k imagens, mesmo autor do lx0xk",
+        "base principal — 8 classes nomeadas, ~2.8k imagens",
+    ),
+    Source(
+        "baopersonal", "paint-defect-combine-2-vsprw",
+        "complementar — mesmas 8 classes, ~3.2k imagens (dedup remove overlap)",
+    ),
+    Source(
+        "baopersonal", "paint-defect-detection-lx0xk",
+        "subset balanceado v1 — 4 classes, ~2k imagens (dedup remove overlap)",
     ),
     Source(
         "cardetecion", "car-paint-damage-detection",
@@ -118,6 +126,10 @@ SOURCES: list[Source] = [
     Source(
         "cat-ln1ow", "paint-defect-detection-j7imb",
         "raras + negativos — blistering, good_paint (~73 imgs)",
+    ),
+    Source(
+        "politeknik-sultan-azlan-shah", "car-paint-surface-defect",
+        "pequeno acadêmico — dirt, scratch, water spot, runs (~40 imgs)",
     ),
 ]
 
