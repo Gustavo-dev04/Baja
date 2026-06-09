@@ -81,6 +81,10 @@ CLASS_MAP: dict[str, str] = {
     "rust": "oxidacao",
 }
 
+# Labels that mark an image as a legitimate NEGATIVE (clean paint).
+# Images whose only annotations are these are kept as background samples.
+NEGATIVE_OK: set[str] = {"good_paint"}
+
 # Explicitly-ignored labels (documented so future contributors know it was a
 # decision, not an oversight). Maps to None.
 IGNORED: set[str] = {

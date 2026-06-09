@@ -42,6 +42,8 @@ def run_training(
     yolo = YOLO(model)
 
     # Modern training recipe tuned for a small, imbalanced dataset.
+    # NOTE: label_smoothing was removed from Ultralytics 8.4 train args —
+    # don't add it back, it raises "not a valid YOLO argument".
     yolo.train(
         data=str(data_yaml),
         epochs=epochs,
@@ -53,7 +55,6 @@ def run_training(
         patience=patience,          # early stopping
         optimizer="auto",
         cos_lr=True,                # cosine LR schedule
-        label_smoothing=0.1,
         warmup_epochs=5,
         # --- augmentation ---
         hsv_h=0.015, hsv_s=0.7, hsv_v=0.4,

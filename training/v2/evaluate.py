@@ -47,14 +47,17 @@ def evaluate(
     print(f"Precision: {box.mp:.4f}")
     print(f"Recall   : {box.mr:.4f}")
 
+    # box.ap50 is ordered by ap_class_index (classes present in this split),
+    # NOT by raw class id — indexing by id silently misattributes scores.
     print("\nPor classe:")
     names = yolo.names
-    for i, c in names.items():
-        try:
-            ap50 = box.ap50[i]
-            print(f"  {c:<18} mAP50={ap50:.3f}")
-        except (IndexError, TypeError):
-            pass
+    class_index = getattr(box, "ap_class_index", [])
+    for pos, cls_id in enumerate(class_index):
+        label = names.get(int(cls_id), str(cls_id))
+        print(f"  {label:<18} mAP50={box.ap50[pos]:.3f}")
+    missing = set(names) - {int(c) for c in class_index}
+    for cls_id in sorted(missing):
+        print(f"  {names[cls_id]:<18} (sem amostras no split)")
 
     save_dir = Path(project) / name
     print(f"\n📊 Gráficos em: {save_dir.absolute()}")
