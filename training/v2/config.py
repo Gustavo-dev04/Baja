@@ -131,11 +131,11 @@ SOURCES: list[Source] = [
         "cat-ln1ow", "paint-defect-detection-j7imb",
         "raras + negativos — blistering, good_paint (~73 imgs)",
     ),
-    Source(
-        "politeknik-sultan-azlan-shah", "car-paint-surface-defect",
-        "pequeno acadêmico — dirt, scratch, water spot, runs (~40 imgs)",
-    ),
 ]
+
+# Removido: politeknik-sultan-azlan-shah/car-paint-surface-defect — é um
+# projeto do tipo `multilabel-classification` (sem bounding boxes), logo
+# incompatível com detecção YOLO. Só ~40 imagens, perda desprezível.
 
 # Datasets deliberately EXCLUDED (kept here so the decision is auditable):
 #   weld-dataset/paint-new (22k)            — mixed domain (carros inteiros,

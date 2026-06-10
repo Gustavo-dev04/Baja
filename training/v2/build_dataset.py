@@ -131,9 +131,18 @@ def build(
     per_source_images: Counter = Counter()
     dropped_lost_labels = 0
 
+    skipped_sources: list[str] = []
     for source in SOURCES:
         print(f"\n⬇️  Baixando {source} — {source.role}")
-        root = _download(rf, source)
+        try:
+            root = _download(rf, source)
+        except Exception as exc:  # noqa: BLE001
+            # A source can fail because it's a classification project (no
+            # boxes), was deleted, or hit a transient API error. Skip it and
+            # keep building from the rest instead of aborting everything.
+            print(f"   ⚠️  pulado ({type(exc).__name__}): {str(exc)[:120]}")
+            skipped_sources.append(str(source))
+            continue
         names = yaml.safe_load((root / "data.yaml").read_text())["names"]
         if isinstance(names, dict):
             names = [names[k] for k in sorted(names, key=int)]
@@ -258,6 +267,10 @@ def build(
     print("\nPor fonte:")
     for src, counts in per_source_counts.items():
         print(f"  {src}: {dict(counts)}")
+    if skipped_sources:
+        print("\n⚠️  Fontes puladas:")
+        for s in skipped_sources:
+            print(f"  - {s}")
     print(f"\n✅ data.yaml: {out / 'data.yaml'}")
     return out / "data.yaml"
 
