@@ -8,7 +8,8 @@ projeto externo de tracking de progressão (outro Claude Code).
 | Versão | Arquivo | Modelo | Classes | mAP@50 | Data |
 |---|---|---|---|---|---|
 | **v0** | [`magnus_v0_snapshot.pdf`](./magnus_v0_snapshot.pdf) | YOLOv8n (3M) | 4 | 0,989 | 2026-05-19 |
-| v1 | (a gerar após fine-tuning) | YOLO11s (9M) | 8 | — | — |
+| **v1** | [`magnus_v1_snapshot.pdf`](./magnus_v1_snapshot.pdf) | YOLO11s (9,4M) | 8 | 0,655 (0,84–0,95 nas 5 saudáveis) | 2026-06-09 |
+| v1.1 | (a gerar — 6 classes saudáveis) | YOLO11s (9,4M) | 6 | ~0,80 projetado | — |
 
 ## Como regenerar
 
