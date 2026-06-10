@@ -34,7 +34,6 @@ import yaml
 
 from .config import (
     CLASS_MAP,
-    CLASS_TO_ID,
     NEGATIVE_OK,
     SOURCES,
     UNIFIED_CLASSES,
@@ -70,9 +69,11 @@ def _download(rf, source) -> Path:
 
 
 def _remap_label_file(
-    label_path: Path, local_names: list[str],
+    label_path: Path,
+    local_names: list[str],
+    class_to_id: dict[str, int],
 ) -> tuple[list[str], bool, bool]:
-    """Read a YOLO .txt and remap to unified class ids.
+    """Read a YOLO .txt and remap to the active taxonomy's class ids.
 
     Returns (remapped_lines, had_any_annotation, had_negative_ok_label).
     """
@@ -93,8 +94,10 @@ def _remap_label_file(
             continue
         unified = CLASS_MAP.get(local_name)
         if unified is None:
-            continue  # dropped class
-        new_id = CLASS_TO_ID[unified]
+            continue  # not in our taxonomy
+        new_id = class_to_id.get(unified)
+        if new_id is None:
+            continue  # excluded from this build's class subset
         out.append(" ".join([str(new_id), *parts[1:5]]))
     return out, had_any, had_negative_ok
 
@@ -106,7 +109,18 @@ def build(
     test_fraction: float = 0.10,
     seed: int = 42,
     oversample_rare: bool = True,
+    classes: list[str] | None = None,
 ) -> Path:
+    """Build the unified dataset.
+
+    `classes` restricts the taxonomy to a subset of UNIFIED_CLASSES (same
+    order is preserved). Boxes of excluded classes are dropped; images whose
+    only annotations were excluded follow the poisoned-negative rule and are
+    discarded. Use it to train the production model on healthy classes only:
+
+        build(classes=["casca_de_laranja", "escorrimento", "bolha",
+                       "water_spotting", "descascamento", "sujeira"])
+    """
     from roboflow import Roboflow
 
     api_key = api_key or os.environ.get("ROBOFLOW_API_KEY")
@@ -115,6 +129,15 @@ def build(
             "ROBOFLOW_API_KEY não definido (use Colab Secrets ou env var).",
         )
     rf = Roboflow(api_key=api_key)
+
+    # Active taxonomy — full set by default, or a validated subset.
+    active_classes = list(classes) if classes else list(UNIFIED_CLASSES)
+    unknown = [c for c in active_classes if c not in UNIFIED_CLASSES]
+    if unknown:
+        raise ValueError(f"Classes fora da taxonomia: {unknown}")
+    class_to_id = {c: i for i, c in enumerate(active_classes)}
+    print(f"🏷️  Taxonomia ativa ({len(active_classes)} classes): "
+          f"{active_classes}")
 
     out = Path(output_dir)
     if out.exists():
@@ -162,7 +185,7 @@ def build(
                 label_path = lbl_dir / (img_path.stem + ".txt")
                 if label_path.exists():
                     lines, had_any, had_neg = _remap_label_file(
-                        label_path, names,
+                        label_path, names, class_to_id,
                     )
                 else:
                     lines, had_any, had_neg = [], False, False
@@ -181,7 +204,7 @@ def build(
                 for ln in lines:
                     cid = int(ln.split()[0])
                     per_source_counts[source.project][
-                        UNIFIED_CLASSES[cid]
+                        active_classes[cid]
                     ] += 1
 
     print(f"\n📦 Imagens-fonte únicas mantidas: {len(samples)}")
@@ -201,15 +224,15 @@ def build(
     total_inst = Counter()
     for counts in per_source_counts.values():
         total_inst.update(counts)
-    present = [c for c in UNIFIED_CLASSES if total_inst[c] > 0]
+    present = [c for c in active_classes if total_inst[c] > 0]
     rare: set[int] = set()
     if oversample_rare and len(present) >= 4:
         threshold = sorted(total_inst[c] for c in present)[len(present) // 4]
         rare = {
-            CLASS_TO_ID[c] for c in present if total_inst[c] <= threshold
+            class_to_id[c] for c in present if total_inst[c] <= threshold
         }
         print(f"📈 Oversampling x{RARE_OVERSAMPLE + 1} para classes raras: "
-              f"{[UNIFIED_CLASSES[i] for i in sorted(rare)]}")
+              f"{[active_classes[i] for i in sorted(rare)]}")
 
     written = Counter()
     for idx, (img_path, lines, _src) in enumerate(samples):
@@ -245,8 +268,8 @@ def build(
         "train: images/train\n"
         "val: images/val\n"
         "test: images/test\n"
-        f"nc: {len(UNIFIED_CLASSES)}\n"
-        "names: [" + ", ".join(f"'{c}'" for c in UNIFIED_CLASSES) + "]\n",
+        f"nc: {len(active_classes)}\n"
+        "names: [" + ", ".join(f"'{c}'" for c in active_classes) + "]\n",
     )
 
     # Report
@@ -262,7 +285,7 @@ def build(
     for src, n_imgs in per_source_images.most_common():
         print(f"  {src:<40} {n_imgs:>6}")
     print("\nInstâncias por classe (consolidado):")
-    for c in UNIFIED_CLASSES:
+    for c in active_classes:
         print(f"  {c:<18} {total_inst[c]:>6}")
     print("\nPor fonte:")
     for src, counts in per_source_counts.items():
