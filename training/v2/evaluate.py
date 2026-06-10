@@ -59,13 +59,16 @@ def evaluate(
     for cls_id in sorted(missing):
         print(f"  {names[cls_id]:<18} (sem amostras no split)")
 
-    save_dir = Path(project) / name
-    print(f"\n📊 Gráficos em: {save_dir.absolute()}")
-    print(f"   confusion_matrix.png, PR_curve.png, ...")
+    # Ultralytics nests results under runs/detect/<project>/<name>; read the
+    # real location from the metrics object instead of guessing.
+    save_dir = Path(getattr(metrics, "save_dir", Path(project) / name))
+    print(f"\n📊 Gráficos em: {save_dir}")
+    print("   confusion_matrix.png, PR_curve.png, ...")
 
     return {
         "map50": float(box.map50),
         "map50_95": float(box.map),
         "precision": float(box.mp),
         "recall": float(box.mr),
+        "save_dir": str(save_dir),
     }
