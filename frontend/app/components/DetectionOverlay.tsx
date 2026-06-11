@@ -15,10 +15,12 @@ const SEVERITY_BY_LABEL: Record<string, Severity> = {
   escorrimento: "alto",
   falha_cobertura: "alto",
   oxidacao: "alto",
+  descascamento: "alto",
   bolha: "medio",
   casca_de_laranja: "medio",
   water_spotting: "medio",
   risco: "baixo",
+  sujeira: "baixo",
   desgaste_generico: "baixo",
 };
 
