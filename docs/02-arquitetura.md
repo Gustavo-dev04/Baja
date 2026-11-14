@@ -11,6 +11,7 @@ Status: **em andamento** (iniciado em 14/11/2026)
 | Interface | **Página web** servida pelo Jetson, operada pelo celular ou notebook |
 | Câmera na mesa giratória | **Ângulo fixo de ~30–45°** |
 | Luz de fundo (modo 2D) | **Base separada**: caixa com o ring light dentro e tampa translúcida |
+| Suporte da câmera | **Haste impressa com duas travas** (90° e ~35°) |
 | Prioridade | **Peça plana → DXF** primeiro; peça geral 3D depois |
 
 ## Visão geral
@@ -55,7 +56,7 @@ flowchart LR
 | **Base de luz (2D)** | Peças planas | Caixa impressa com o ring light dentro, tampa de acrílico leitoso ou papel vegetal. Câmera olhando **de cima (90°)** |
 | **Mesa giratória (3D + furos)** | Peças gerais | Prato giratório. Ring light em volta da câmera, que olha a **~30–45°** |
 
-**Ponto de projeto:** a câmera precisa de duas posições (90° para a base e ~35° para a mesa). Proposta: uma haste impressa com **duas travas fixas** de ângulo. Assim cada posição é repetível e a calibração continua valendo.
+**Suporte da câmera (decidido):** uma haste impressa com **duas travas fixas** de ângulo, 90° para a base de luz e ~35° para a mesa giratória. Cada posição é repetível, então a calibração continua valendo.
 
 O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera).
 
@@ -64,7 +65,7 @@ O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera
 | Item | Status |
 |---|---|
 | NVIDIA Jetson Orin Nano | ✅ Tem |
-| Câmera IMX219 120° | ✅ Tem |
+| Câmera IMX219 120° (cabo de 22 pinos, liga direto no Orin Nano) | ✅ Tem |
 | Ring light 6500 K | ✅ Tem |
 | Motor de passo NEMA 17 | ✅ Tem |
 | Driver A4988 | ✅ Tem |
@@ -74,7 +75,6 @@ O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera
 | Capacitor eletrolítico 100 µF (entre VMOT e GND do A4988) | ❓ Verificar (protege o driver, custa centavos) |
 | Rolamento 608 (de skate) para o prato | ❓ Verificar |
 | Acrílico leitoso ou papel vegetal (tampa da base de luz) | ❓ Verificar |
-| Cabo CSI adaptador 15→22 pinos (se a câmera for padrão Raspberry Pi) | ❓ Verificar |
 | Tabuleiro ChArUco | Impresso em papel (custo zero) |
 
 ### Mesa giratória
@@ -124,4 +124,4 @@ O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera
 
 - [ ] Verificar os itens marcados com ❓
 - [ ] Confirmar a versão do JetPack instalada no Jetson
-- [ ] Desenhar a haste com duas travas e a base de luz (croqui)
+- [ ] Desenhar a haste com duas travas, a base de luz e a mesa giratória (croqui)
