@@ -8,6 +8,8 @@ Gera um **CAD editável** de uma peça a partir de fotos.
 
 Projeto de extensão – FATEC Santo André.
 
+**Relatório atual do software:** [docs/relatorio-software.md](docs/relatorio-software.md)
+
 ## Etapas
 
 | # | Etapa | Status |
