@@ -45,6 +45,7 @@ Gerar um **CAD editável** de uma peça a partir de fotos.
 | Processamento | NVIDIA Jetson Orin Nano |
 | Câmera | IMX219 com lente de 120° (plano B: câmera do celular) |
 | Movimento | Mesa giratória impressa em 3D com motor de passo |
+| Iluminação | Ring light 6500 K (luz frontal); luz de fundo a definir |
 
 Critério para trocar para o celular: se o erro medido com a IMX219 numa peça de referência passar de **± 1 mm**.
 

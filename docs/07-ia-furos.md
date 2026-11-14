@@ -16,6 +16,21 @@ A IA começa com **uma única tarefa: detectar furos**. É uma feature simples e
 
 Na vista de cima com luz de fundo, o furo passante aparece como um ponto de luz e dá para achar sem IA. A IA faz diferença nas **fotos da mesa giratória com luz frontal**, onde aparecem furos inclinados, furos cegos e reflexos.
 
+## Iluminação (ring light 6500 K)
+
+O grupo vai usar **os dois modos**: luz de fundo (vista de cima) e luz frontal com ring light (mesa giratória).
+
+| Modo | Montagem | O que a imagem mostra |
+|---|---|---|
+| Luz de fundo | Ring light **embaixo** de uma placa translúcida (acrílico leitoso ou papel vegetal), peça por cima | Silhueta preta + furos passantes como pontos de luz. Não precisa de IA |
+| Luz frontal | Câmera **no centro** do ring light, apontada para a peça na mesa | Furos escuros sobre a superfície clara. Aqui entra a IA |
+
+Cuidados com o ring light:
+- **Reflexo em anel no metal:** o próprio anel aparece refletido em peça brilhante. Para evitar: difusor (papel vegetal sobre o anel) e/ou fosquear a peça (spray revelador, talco ou xampu a seco). A IA também precisa ver exemplos com reflexo no treino.
+- **Cintilação (flicker):** com o brilho abaixo de 100%, alguns ring lights piscam (PWM) e aparecem faixas na imagem. Usar 100% de brilho ou ajustar o tempo de exposição.
+- **Câmera em manual:** travar balanço de branco, exposição e ganho na IMX219, para que todas as fotos saiam iguais (importante para a IA e para a medição).
+- **6500 K (luz do dia):** usar sempre a mesma luz nas fotos de treino e no uso real.
+
 ## Classes
 
 - Fase 1: `furo`
