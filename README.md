@@ -19,5 +19,5 @@ Projeto de extensão – FATEC Santo André.
 | 4 | Câmera e calibração | – |
 | 5 | Peças planas → DXF | – |
 | 6 | Peças gerais → CAD | – |
-| 7 | IA de features | – |
+| 7 | [IA de detecção de furos](docs/07-ia-furos.md) | Planejado |
 | 8 | Validação e apresentação | – |
