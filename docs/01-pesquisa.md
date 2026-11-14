@@ -73,7 +73,7 @@ Objetivo: saber o que já existe, onde está a lacuna e qual é o diferencial do
 
 - LI, Y.; VOSSELMAN, G.; NEX, F. A Comparison of Multi-View Stereo Methods for Photogrammetric 3D Reconstruction: From Traditional to Learning-Based Approaches. arXiv:2604.10246, 2026. https://arxiv.org/abs/2604.10246
 - RUKHOVICH, D. et al. CAD-Recode: Reverse Engineering CAD Code from Point Clouds. ICCV, 2025. https://arxiv.org/abs/2412.14042
-- CHEN, T. et al. Img2CAD: Conditioned 3D CAD Model Generation from Single Image with Structured Visual Geometry. arXiv:2410.03417, 2024. https://arxiv.org/abs/2410.03417
+- CHEN et al. Img2CAD: Conditioned 3D CAD Model Generation from Single Image with Structured Visual Geometry. arXiv:2410.03417, 2024. https://arxiv.org/abs/2410.03417
 - WANG, J. et al. VGGT: Visual Geometry Grounded Transformer. CVPR, 2025. https://github.com/facebookresearch/vggt
 - SCHÖNBERGER, J. L.; FRAHM, J.-M. Structure-from-Motion Revisited. CVPR, 2016. (COLMAP)
 - OpenScan – open source 3D scanner. https://www.openscan.eu
