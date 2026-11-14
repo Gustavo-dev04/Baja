@@ -1,6 +1,6 @@
 # Etapa 7 – IA de detecção de furos (plano)
 
-Status: **planejado** (decidido em 14/11/2026)
+Status: **em andamento** (código de treino em [`ia/`](../ia/README.md))
 
 ## Decisão
 
@@ -10,7 +10,7 @@ A IA começa com **uma única tarefa: detectar furos**. É uma feature simples e
 
 | Etapa | Quem faz | Por quê |
 |---|---|---|
-| 1. **Achar** o furo na imagem | **IA** (YOLO de segmentação) | Distingue furo de sujeira, sombra e reflexo, e acha furos vistos de lado (que aparecem como elipse) |
+| 1. **Achar** o furo na imagem | **IA** (YOLO11n, detecção por caixa) | Distingue furo de sujeira, sombra e reflexo, e acha furos vistos de lado (que aparecem como elipse) |
 | 2. **Medir** centro e diâmetro | **Geometria clássica** (bordas subpixel + ajuste de círculo/elipse, OpenCV) | Mais preciso e explicável que a IA |
 | 3. **Interpretar** a medida | **Regra** (tabela de medidas padrão) | Recupera a intenção de projeto, por exemplo "Ø 9,0 mm → furo passante para M8" |
 
@@ -66,7 +66,8 @@ Cuidados com o ring light:
 
 Cuidados:
 - Salvar os checkpoints no Google Drive (a sessão do Colab cai).
-- Usar o menor modelo YOLO de segmentação primeiro; só aumentar se a precisão não bastar.
+- Usar o menor modelo (YOLO11n) primeiro; só aumentar se a precisão não bastar.
+- Detecção por **caixa** (não segmentação): a medida vem da geometria, e a maioria dos datasets públicos só tem caixas.
 
 ## Critério de sucesso
 

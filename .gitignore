@@ -1,0 +1,9 @@
+# dados e resultados de treino (ficam no Google Drive)
+dados/
+runs/
+*.pt
+*.onnx
+*.engine
+__pycache__/
+.venv/
+venv*/
