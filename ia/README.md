@@ -41,7 +41,12 @@ As imagens com os rótulos desenhados ficam em `dados/sintetico/previa/`.
 | [Holes & Fasteners](https://universe.roboflow.com/low-effort-programming-for-flexible-assembly-task/holes-fasteners) (Roboflow) | ? | Caixa (furo + parafuso) | Verificar |
 | [Holes Object Detection in Industrial Scene](https://datasetninja.com/holes-object-detection) (Kaggle) | 493 imagens | Caixa | **Não confirmada**, não usar até verificar |
 | [Open Stamped Parts Dataset](https://arxiv.org/abs/2403.10369) | 1.680 rotuladas | Máscaras com furos (chapa estampada) | Verificar |
+| [Mechanical Parts](https://universe.roboflow.com/mazhar-cakir/mechanical-parts) (Roboflow, Mazhar Cakir) | ~2.250 imagens | Caixa: porca, parafuso, rolamento, engrenagem (**não marca furos**) | CC BY-NC-SA 4.0 (uso não comercial) |
 | **Fotos do grupo** (CVAT / Label Studio) | Meta: 200–500 | Caixa | Nosso |
+
+> **Atenção com o Mechanical Parts:** porcas, rolamentos e engrenagens têm furo, mas o furo não está rotulado.
+> Se essas imagens entrarem no treino como estão, a IA aprende que "furo não é furo". Usar só para **teste**
+> ou depois de rotular os furos (pré-rótulo com o modelo + correção no CVAT).
 
 As **fotos reais do grupo são as mais importantes**: o sintético ensina o conceito de furo, mas só as fotos reais
 ensinam como a IMX219 e o ring light de vocês enxergam as peças.
