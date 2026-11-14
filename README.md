@@ -13,7 +13,7 @@ Projeto de extensão – FATEC Santo André.
 | # | Etapa | Status |
 |---|---|---|
 | 0 | [Definição](docs/00-definicao.md) | Em andamento |
-| 1 | Pesquisa (o que já existe, diferencial, referências) | – |
+| 1 | [Pesquisa](docs/01-pesquisa.md) | Em andamento |
 | 2 | Arquitetura (hardware + software, lista de componentes) | – |
 | 3 | Mesa giratória | – |
 | 4 | Câmera e calibração | – |
