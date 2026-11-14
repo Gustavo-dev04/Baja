@@ -22,7 +22,7 @@ Gerar um **CAD editável** de uma peça a partir de fotos.
 |---|---|
 | Tipos de peça | **Planas** (chapas, suportes, flanges, juntas) e **gerais** (peças 3D) |
 | Precisão | **± 1 mm** |
-| Tamanho máximo da peça | **[definir] cm** |
+| Tamanho máximo da peça | **10 cm** |
 | Saída | CAD editável, aberto no **Fusion 360** (ver formatos abaixo) |
 
 ### Fica de fora
@@ -68,6 +68,6 @@ Critério para trocar para o celular: se o erro medido com a IMX219 numa peça d
 
 ## Pendências da Etapa 0
 
-- [ ] Tamanho máximo da peça (em cm)
+- [x] Tamanho máximo da peça: 10 cm
 - [ ] Nomes e funções dos 4 integrantes
 - [ ] Confirmar o que precisa estar pronto em 02/12 e em 04/12
