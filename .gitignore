@@ -7,3 +7,6 @@ runs/
 __pycache__/
 .venv/
 venv*/
+
+# modelos registrados (pequenos) podem ir para o repositório
+!ia/modelos/*.pt
