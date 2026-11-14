@@ -14,7 +14,7 @@ Projeto de extensão – FATEC Santo André.
 |---|---|---|
 | 0 | [Definição](docs/00-definicao.md) | Em andamento |
 | 1 | [Pesquisa](docs/01-pesquisa.md) | Em andamento |
-| 2 | Arquitetura (hardware + software, lista de componentes) | – |
+| 2 | [Arquitetura](docs/02-arquitetura.md) | Em andamento |
 | 3 | Mesa giratória | – |
 | 4 | Câmera e calibração | – |
 | 5 | Peças planas → DXF | – |
