@@ -120,8 +120,34 @@ O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera
 7. Converter para mm e corrigir a paralaxe pela espessura.
 8. Gerar o **DXF** e um relatório com as medidas (ex.: "furo Ø 6,6 mm → passante para M6").
 
+
+## Projeto CAD da bancada – Scanner v5 (Fusion 360)
+
+Arquivo: [`hardware/ScanParts - Scanner v5.f3d`](../hardware/) (recebido em 17/11/2026). Componentes do modelo:
+
+| Grupo | Componentes no modelo |
+|---|---|
+| Base | Base MDF, pés de borracha Ø20×30, calços, colunas de apoio, espaçadores |
+| Haste | Haste vertical 20×20 (175 mm) com flange sob a base, carro de ajuste com manípulo, braço 20×20 (55 mm) |
+| Óptica | Câmera IMX219 com lente, **filtro polarizador CPL**, ring light 6500 K Ø160 (LED Ø170), cabo flat 22 vias |
+| **Laser** | **Laser de linha 650 nm Ø12**, com suporte e abraçadeira |
+| Mesa giratória | **Prato giratório Ø180** com **24 alvos de referência a cada 15°**, eixo, **motor de passo 28BYJ-48** e **driver ULN2003** |
+| Eletrônica | Jetson Orin Nano Dev Kit (placa carrier, módulo SO-DIMM, dissipador, ventoinha, conectores de câmera J20/J21, header de 40 pinos) sobre plataforma própria |
+
+### Diferenças em relação às decisões anteriores (a confirmar)
+
+| Tema | Decidido antes | No modelo v5 |
+|---|---|---|
+| Motor | NEMA 17 + driver A4988 | **28BYJ-48 + ULN2003** (5 V, redução interna ~1:64, ~2048 passos/volta) |
+| Controle do motor | Arduino Uno/Nano via USB | Arduino não aparece no modelo; o ULN2003 pode ser ligado direto no header de 40 pinos do Jetson |
+| Luz de fundo (peças planas) | Base separada com o ring light embaixo | **Não existe no modelo**; o ring light está junto da câmera |
+| Laser de linha | Não previsto | **Novo**: permite escaneamento 3D por triangulação a laser com a mesa giratória |
+| Filtro CPL | Não previsto | **Novo**: reduz reflexos em peças metálicas |
+| Marcadores do prato | ArUco na borda | 24 alvos a cada 15° (mesma função: medir o ângulo real) |
+
 ## Pendências da Etapa 2
 
 - [ ] Verificar os itens marcados com ❓
 - [ ] Confirmar a versão do JetPack instalada no Jetson
+- [ ] Resolver as diferenças entre o modelo v5 e as decisões anteriores (motor, controle, luz de fundo)
 - [ ] Desenhar a haste com duas travas, a base de luz e a mesa giratória (croqui)
