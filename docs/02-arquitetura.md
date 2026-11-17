@@ -123,7 +123,13 @@ O ring light muda de lugar entre os modos (dentro da base ou em volta da câmera
 
 ## Projeto CAD da bancada – Scanner v5 (Fusion 360)
 
-Arquivo: [`hardware/ScanParts - Scanner v5.f3d`](../hardware/) (recebido em 17/11/2026). Componentes do modelo:
+Arquivo: [`hardware/ScanParts - Scanner v5.f3d`](../hardware/) (recebido em 17/11/2026).
+
+| Vista isométrica | Vista lateral |
+|---|---|
+| ![Scanner v5 – isométrica](img/hardware/scanner_v5_isometrica.jpg) | ![Scanner v5 – lateral](img/hardware/scanner_v5_lateral.jpg) |
+
+Componentes do modelo:
 
 | Grupo | Componentes no modelo |
 |---|---|
