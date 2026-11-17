@@ -360,7 +360,7 @@ const textual = [
     ],
     [5, 11], DATA_FONTE),
   ...figura("Detecções do modelo v1 em fotografias reais de porcas e parafusos", "teste_real_porcas_v1.jpg", 520,
-    "Elaborado pelos autores (2026), sobre imagens do conjunto Mechanical Parts (CAKIR, 2023).",
+    "Elaborado pelos autores (2026), sobre imagens do conjunto Mechanical Parts (CAKIR, [2023?]).",
     "Duas fotografias de porcas e parafusos sobre um prato branco, com caixas azuis marcadas como furo em volta das porcas."),
   corpo("Mesmo sem ter sido treinado com nenhuma fotografia real, o modelo encontrou os furos das porcas com confiança entre 0,70 e 0,81 e não marcou os parafusos, que não têm furo visível. Por outro lado, as caixas envolveram a porca inteira, e não apenas o furo. Não foi possível calcular precisão e *recall*, pois o conjunto não marca os furos."),
   h2("4.4", "Problemas encontrados e correções"),
@@ -404,7 +404,7 @@ const textual = [
 // ---------------------------------------------------------------- referências (NBR 6023)
 const REFS = [
   "BRADSKI, G. The OpenCV library. **Dr. Dobb's Journal of Software Tools**, [*s. l.*], v. 25, n. 11, p. 120-125, 2000.",
-  "CAKIR, M. **Mechanical Parts Dataset**. [*S. l.*]: Roboflow Universe, 2023. Disponível em: https://universe.roboflow.com/mazhar-cakir/mechanical-parts. Acesso em: 14 nov. 2026.",
+  "CAKIR, M. **Mechanical Parts Dataset**. [*S. l.*]: Roboflow Universe, [2023?]. Disponível em: https://universe.roboflow.com/mazhar-cakir/mechanical-parts. Acesso em: 14 nov. 2026.",
   "EVERINGHAM, M. *et al.* The PASCAL Visual Object Classes (VOC) challenge. **International Journal of Computer Vision**, [*s. l.*], v. 88, n. 2, p. 303-338, 2010.",
   "JOCHER, G.; QIU, J. **Ultralytics YOLO11**. Versão 11.0.0. [*S. l.*]: Ultralytics, 2024. Disponível em: https://github.com/ultralytics/ultralytics. Acesso em: 14 nov. 2026.",
   "LI, Y.; VOSSELMAN, G.; NEX, F. **A comparison of multi-view stereo methods for photogrammetric 3D reconstruction**: from traditional to learning-based approaches. arXiv:2604.10246, 2026. Disponível em: https://arxiv.org/abs/2604.10246. Acesso em: 14 nov. 2026.",
