@@ -6,8 +6,8 @@ Status: **em andamento** (iniciado em 14/11/2026)
 
 | Tema | Decisão |
 |---|---|
-| Controle do motor | **Arduino Uno/Nano via USB**: o Jetson manda comandos e o Arduino gera os passos |
-| Driver do motor | **A4988** |
+| Controle do motor | **Arduino Uno/Nano via USB**: o Jetson manda comandos e o Arduino gera os passos (confirmado em 17/11) |
+| Motor e driver | **28BYJ-48 + ULN2003** (modelo v5; substitui NEMA 17 + A4988, decidido em 17/11) |
 | Interface | **Página web** servida pelo Jetson, operada pelo celular ou notebook |
 | Câmera na mesa giratória | **Ângulo fixo de ~30–45°** |
 | Luz de fundo (modo 2D) | **Base separada**: caixa com o ring light dentro e tampa translúcida |
@@ -138,9 +138,9 @@ Arquivo: [`hardware/ScanParts - Scanner v5.f3d`](../hardware/) (recebido em 17/1
 
 | Tema | Decidido antes | No modelo v5 |
 |---|---|---|
-| Motor | NEMA 17 + driver A4988 | **28BYJ-48 + ULN2003** (5 V, redução interna ~1:64, ~2048 passos/volta) |
-| Controle do motor | Arduino Uno/Nano via USB | Arduino não aparece no modelo; o ULN2003 pode ser ligado direto no header de 40 pinos do Jetson |
-| Luz de fundo (peças planas) | Base separada com o ring light embaixo | **Não existe no modelo**; o ring light está junto da câmera |
+| Motor | NEMA 17 + driver A4988 | **28BYJ-48 + ULN2003** (5 V, redução interna ~1:64, ~2048 passos/volta) → ✅ **adotado** |
+| Controle do motor | Arduino Uno/Nano via USB | Arduino não aparece no modelo → ✅ **mantido o Arduino via USB** (incluir no modelo) |
+| Luz de fundo (peças planas) | Base separada com o ring light embaixo | Não existe no modelo → ✅ **substituída por fundo preto fosco + ring light + filtro CPL** |
 | Laser de linha | Não previsto | **Novo**: permite escaneamento 3D por triangulação a laser com a mesa giratória |
 | Filtro CPL | Não previsto | **Novo**: reduz reflexos em peças metálicas |
 | Marcadores do prato | ArUco na borda | 24 alvos a cada 15° (mesma função: medir o ângulo real) |
@@ -149,5 +149,7 @@ Arquivo: [`hardware/ScanParts - Scanner v5.f3d`](../hardware/) (recebido em 17/1
 
 - [ ] Verificar os itens marcados com ❓
 - [ ] Confirmar a versão do JetPack instalada no Jetson
-- [ ] Resolver as diferenças entre o modelo v5 e as decisões anteriores (motor, controle, luz de fundo)
+- [x] Diferenças entre o modelo v5 e as decisões anteriores resolvidas (17/11)
+- [ ] Incluir o Arduino Uno/Nano no modelo da bancada
+- [ ] Fonte 5 V separada para o 28BYJ-48 (~240 mA), sem puxar do pino 5 V do Arduino
 - [ ] Desenhar a haste com duas travas, a base de luz e a mesa giratória (croqui)
