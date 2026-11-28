@@ -1,0 +1,7 @@
+# ScanParts – software da bancada (Python 3.8+; no Jetson use o OpenCV do JetPack, que já tem GStreamer)
+numpy>=1.21
+opencv-python>=4.7   # no Jetson: NÃO instale; use o OpenCV que vem com o JetPack (com suporte a GStreamer)
+ezdxf>=1.0
+pillow>=9.0
+# opcional, para a IA de furos:
+# ultralytics>=8.3
